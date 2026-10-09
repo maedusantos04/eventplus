@@ -1,0 +1,50 @@
+/* Página de eventos */
+.eventos-container {
+    max-width: 1080px;
+    margin: 40px auto 60px;
+    padding: 0 20px;
+}
+
+.titulo-eventos {
+    font-size: 32px;
+    color: #17143f;
+    margin-bottom: 25px;
+    font-weight: 600;
+}
+
+/* Grade dos cards */
+.eventos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 250px));
+    justify-content: space-between;
+    gap: 28px 30px;
+}
+
+/* Responsividade */
+@media (max-width: 850px) {
+    .eventos-grid {
+        grid-template-columns: repeat(2, minmax(0, 250px));
+        justify-content: center;
+        gap: 25px;
+    }
+}
+
+@media (max-width: 580px) {
+    .eventos-container {
+        margin-top: 25px;
+    }
+
+    .titulo-eventos {
+        font-size: 26px;
+    }
+
+    .eventos-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .home-evento-card {
+        width: 100%;
+        max-width: 320px;
+        margin: 0 auto;
+    }
+}

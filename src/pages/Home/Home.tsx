@@ -1,29 +1,46 @@
-import logoEvent from "../../assets/logo1.svg"
 import bannerEvento1 from "../../assets/banner-1.png"
 import bannerEvento2 from "../../assets/banner-2.png"
 import bannerEvento3 from "../../assets/banner-3.png"
 import visaoImg from "../../assets/visao-img.png"
 
+import Header from "../../components/header/Header"
+import Footer from "../../components/footer/Footer"
+import CardEvento from "../../components/cardEvento/CardEvento"
 import Carrossel from "../../components/carrossel/Carrossel"
 
 import "./Home.css"
 
 function Home() {
+
+    const eventos = [
+        {
+            id: "1",
+            imagem: bannerEvento1,
+            titulo: "Evento de Tecnologia.",
+            descricao: "Conheça novidades e tendências do setor.",
+            categoria: "Tecnologia"
+        },
+
+        {
+            id: "2",
+            imagem: bannerEvento2,
+            titulo: "Workshop de Desenvolvimento",
+            descricao: "Pratique desenvolvimento com atividades guiadas.",
+            categoria: "Workshop"
+        },
+
+        {
+            id: "3",
+            imagem: bannerEvento3,
+            titulo: "Meetup de IA",
+            descricao: "Discussões sobre aplicações de inteligência artificial.",
+            categoria: "Meetup"
+        }
+    ]
+
     return (
         <>
-            <header className="home-header">
-                <div className="home-header-conteudo">
-                    <img src={logoEvent} alt="Logo Event+" />
-                    <nav>
-                        <a href="#inicio">Home</a>
-                        <a href="#eventos">Eventos</a>
-                        <a href="#usuarios">Usuarios</a>
-                        <a href="#contato">Contatos</a>
-                    </nav>
-                    <button>Entrar</button>
-                </div>
-            </header>
-
+            <Header/>
             <main>
                 <Carrossel/>
 
@@ -42,37 +59,21 @@ function Home() {
                         <h2>Próximos Eventos</h2>
                         <hr />
                     </div>
+
                     <div className="home-eventos-lista">
-                        <article className="home-evento-card">
-                            <img src={bannerEvento1} alt="Evento de Tecnologia" />
-                            <span>Tecnologia</span>
-                            <div className="home-evento-card-info">
-                                <h3>Evento de Tecnologia</h3>
-                                <p>Conheça novidades e tedências do setor</p>
-                                <button type="button">Ver Evento</button>
-                            </div>
-                        </article>
+                        {eventos.map((evento) => (
+                            <CardEvento
+                            key={evento.id}
+                            id={evento.id}
+                            titulo={evento.titulo}
+                            imagem={evento.imagem}
+                            descricao={evento.descricao}
+                            categoria={evento.categoria}
+                            />
+                        ))}
+                        
+                        </div>
 
-                        <article className="home-evento-card">
-                            <img src={bannerEvento2} alt="Workshop de desenvolvimento" />
-                            <span>Workshop</span>
-                            <div className="home-evento-card-info">
-                                <h3>Workshop de Desenvolvimento</h3>
-                                <p>Pratique desenvolvimento com atividades guiadas.</p>
-                                <button type="button">Ver Evento</button>
-                            </div>
-                        </article>
-
-                        <article className="home-evento-card">
-                            <img src={bannerEvento3} alt="Meetup de Inteligencia Artificial" />
-                            <span>Meetup</span>
-                            <div className="home-evento-card-info">
-                                <h3>Meetup de IA</h3>
-                                <p>Discussões sobre aplicação de inteligência artificial</p>
-                                <button type="button">Ver Evento</button>
-                            </div>
-                        </article>
-                    </div>
                 </section>
                 <section id="contato" className="home-contato">
                     <div className="home-contato-container">
@@ -91,10 +92,8 @@ function Home() {
                     </div>
                 </section>
             </main>
+            <Footer/>
 
-            <footer className="home-footer">
-                <p>Escola Senai de Informática - 2026</p>
-            </footer>
 
         </>
     )

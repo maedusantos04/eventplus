@@ -7,48 +7,6 @@
     --azul-claro: rgba(0,80,251,0.21);
 }
 
-.home-header{
-    border-bottom: 1px solid var(--cinza-claro);
-    background: var(--branco);
-}
-
-.home-header-conteudo {
-    width: min(1200px, calc(100% - 48px));
-    min-height: 60px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-}
-
-.home-header img {
-    width: 100px;
-}
-
-.home-header nav{
-    display: flex;
-    gap: 28px;
-}
-
-.home-header a {
-    color: var(--cor-texto);
-    text-decoration: none;
-}
-
-.home-header button {
-    border: none;
-    background: none;
-    color: var(--cor-texto);
-    cursor: pointer;
-}
-
-.home-banner img {
-    width: 100%;
-    max-height: 530px;
-    object-fit: cover;
-}
-
 .home-visao-container,
 .home-eventos,
 .home-contato-container{
@@ -92,59 +50,7 @@
     margin-top: 32px;
 }
 
-.home-evento-card {
-    border: 1px solid var(--vermelho-escuro);
-    border-radius: 12px;
-    overflow: hidden;
-    max-width: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
 
-.home-evento-card img{
-    width: 100%;
-    aspect-ratio: 16 / 9;
-    object-fit: cover;
-}
-
-.home-evento-card span{
-    background-color:var(--azul-claro) ;
-    border-radius: 12px;
-    padding: 0 10px;
-    display: inline-block;
-    width: 50%;
-    text-align: center;
-}
-
-.home-evento-card-info{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    justify-content: space-between;
-    height: 70%;
-}
-
-.home-evento-card-info p,
-.home-eventos-card-info h3
-{
-    min-height: 50px;
-}
-
-.home-evento-card-info button {
-    border: none;
-    background: none;
-    color: var(--vermelho);
-    font-weight: 700;
-}
-
-.home-evento-card h3,
-.home-evento-card p,
-.home-evento-card span,
-.home-evento-card button{
-    margin: 12px 16px;
-}
 
 .home-eventos-titulo{
     display: flex;
@@ -197,11 +103,4 @@
 .home-contato-conteudo iframe {
     width: 50%;
     height: 35vh;
-}
-
-.home-footer {
-    padding: 24px;
-    text-align: center;
-    background: var(--branco);
-    color: var(--cor-texto);
 }

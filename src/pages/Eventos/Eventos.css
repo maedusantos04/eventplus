@@ -1,0 +1,32 @@
+:root {
+    --cinza-claro: #ded9da;
+    --branco: #ffffff;
+    --cor-texto: #17143f;
+    --vermelho: #b51d44;
+    --vermelho-escuro: #821b47;
+    --azul-claro: rgba(0,80,251,0.21);
+}
+
+.catalogo-eventos {
+    width: min(1080px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 40px 0 64px;
+}
+
+.catalogo-eventos h1 {
+    color: var(--cor-texto);
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.catalogo-eventos > div {
+    display: grid;
+    grid-template-columns: repeat(3, 250px);
+    justify-content: space-between;
+    gap: 28px;
+}
+
+.catalogo-eventos .home-evento-card {
+    width: 100%;
+    max-width: 250px;
+}
