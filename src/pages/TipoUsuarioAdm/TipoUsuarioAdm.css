@@ -1,0 +1,120 @@
+.admin-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Formulário de Topo */
+.admin-main {
+    width: min(1200px, calc(100% - 48px));
+    margin: 40px auto 60px;
+    text-align: center;
+}
+
+.admin-main h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin-bottom: 40px;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.admin-form-section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    flex-wrap: wrap;
+}
+
+.admin-illustration img {
+    max-width: 320px;
+    height: auto;
+}
+
+.admin-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: min(450px, 100%);
+}
+
+.admin-form input,
+.admin-form select {
+    border: none;
+    border-bottom: 1px solid #707070;
+    padding: 8px 4px;
+    font-size: 0.95rem;
+    outline: none;
+    background: transparent;
+}
+
+.form-group-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.btn-cadastrar {
+    background-color: var(--vermelho, #b51d44);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.2s;
+}
+
+.btn-cadastrar:hover {
+    background-color: var(--vermelho-escuro, #821b47);
+}
+
+/* Secção Inferior (Lista de Utilizadores) */
+.admin-list-section {
+    width: 100%;
+    background-color: var(--vermelho, #b51d44);
+    color: white;
+    padding: 40px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-list-section h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+    text-decoration: underline;
+    text-underline-offset: 8px;
+}
+
+.admin-table {
+    width: min(1000px, 100%);
+    border-collapse: collapse;
+    text-align: center;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 14px;
+    font-size: 0.95rem;
+}
+
+.admin-table thead tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.admin-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.btn-icon {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+}

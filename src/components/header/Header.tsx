@@ -1,19 +1,35 @@
-import { Link, NavLink, useNavigate } from "react-router-dom"
 
-import logoEvent from "../../assets/logo1.svg"
-import "./Header.css"
-import { perfilEhAdministrador, perfilEhOrganizador, useAuth } from "../../context/auth"
+import { Link, NavLink, useNavigate } from "react-router-dom";
+
+import logoEvent from "../../assets/logo1.svg";
+import "./Header.css";
+
+import { useAuth } from "../../context/auth";
 
 function Header() {
-    const {autenticado, usuario, perfil, logout } = useAuth();
+    const { autenticado, perfil, logout } = useAuth();
 
     const navigate = useNavigate();
-    const administrador = perfilEhAdministrador(perfil);
-    const organizador = perfilEhOrganizador(perfil);
+
+    const nomePerfil = String(perfil ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .trim()
+        .toLowerCase();
+
+    const administrador =
+        autenticado &&
+        (nomePerfil.includes("admin") ||
+            nomePerfil.includes("administrador"));
+
+    const organizador =
+        autenticado &&
+        (nomePerfil.includes("organizador") ||
+            administrador);
 
     function sair() {
         logout();
-        navigate("/");
+        navigate("/login");
     }
 
     return (
@@ -25,24 +41,48 @@ function Header() {
 
                 <nav>
                     <NavLink to="/home">Home</NavLink>
+
                     <NavLink to="/eventos">Eventos</NavLink>
-                    <NavLink to="/usuarios">Usuarios</NavLink>
-                    <NavLink to="/admin">Administrador</NavLink>
+
+                    {administrador && (
+                        <>
+                            <NavLink to="/usuarios">
+                                Usuários
+                            </NavLink>
+
+                            <NavLink to="/tipoevento">
+                                Tipo de Evento
+                            </NavLink>
+
+                            <NavLink to="/tipousuario">
+                                Tipo Usuário
+                            </NavLink>
+                        </>
+                    )}
+
                     <Link to="/home#contato">Contatos</Link>
                 </nav>
 
-                {autenticado ?
-                <>
-                <Link to="/conta">Minha conta</Link>
-                <Link onClick={logout} to="/login">Sair</Link>
-                </>
-                : 
-                <Link to="/login">Entrar</Link>
-                }
+                <div className="header-acoes">
+                    {autenticado ? (
+                        <>
+                            {organizador && (
+                                <Link to="/conta">
+                                    Minha Conta
+                                </Link>
+                            )}
 
+                            <button type="button" onClick={sair}>
+                                Sair
+                            </button>
+                        </>
+                    ) : (
+                        <Link to="/login">Entrar</Link>
+                    )}
+                </div>
             </div>
         </header>
-    )
+    );
 }
 
 export default Header;

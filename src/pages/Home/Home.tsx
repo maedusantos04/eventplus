@@ -7,33 +7,50 @@ import Carrossel from "../../components/carrossel/Carrossel";
 
 import "./Home.css";
 
-import type { Evento } from "../../types/api";
 import { useCallback, useEffect, useState } from "react";
-import { eventoService } from "../../services/eventPlusservice";
 import { getApiErrorMessage } from "../../services/api";
+
+import type { Evento, TipoEvento } from "../../types/api";
+import {
+    eventoService,
+    tipoEventoService
+} from "../../services/eventPlusservice";
 
 function Home() {
     const [eventos, setEventos] = useState<Evento[]>([]);
     const [carregando, setCarregando] = useState(true);
     const [erro, setErro] = useState("");
+    const [tiposEventos, setTiposEventos] = useState<TipoEvento[]>([]);
+
+
 
     const carregar = useCallback(async () => {
         setCarregando(true);
         setErro("");
 
         try {
-            const dados = await eventoService.listarProximos();
+            const [dados, tipos] = await Promise.all([
+                eventoService.listarProximos(),
+                tipoEventoService.listar()
+            ]);
 
-            console.log("Eventos recebidos:", dados);
+            const hoje = new Date();
 
-            setEventos(dados.slice(0, 3));
+            const eventosFuturos = dados.filter((item) => {
+                if (!item.dataEvento) return true;
+
+                return new Date(item.dataEvento) >= hoje;
+            });
+
+            setTiposEventos(tipos);
+            setEventos(eventosFuturos.slice(0, 3));
         } catch (error) {
-            console.error("Erro ao buscar eventos:", error);
             setErro(getApiErrorMessage(error));
         } finally {
             setCarregando(false);
         }
     }, []);
+
 
     useEffect(() => {
         void carregar();
@@ -100,11 +117,11 @@ function Home() {
                                 imagem={evento.imagemUrl}
                                 descricao={evento.descricao}
                                 categoria={
-                                    evento.idTipoEventoNavigation?.tituloTipoEvento ||
-                                    evento.idTipoEventoNavigation?.titulo ||
-                                    (evento as Record<string, any>).tipoEvento?.tituloTipoEvento ||
-                                    (evento as Record<string, any>).tipoEvento?.titulo ||
-                                    "Sem categoria"
+                                    tiposEventos.find(
+                                        (tipo) => tipo.idTipoEvento === evento.idTipoEvento
+                                    )?.tituloTipoEvento
+                                    ?? evento.idTipoEventoNavigation?.tituloTipoEvento
+                                    ?? "Sem categoria"
                                 }
                             />
                         ))}

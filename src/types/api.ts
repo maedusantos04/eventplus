@@ -16,13 +16,29 @@ export interface AuthSession {
 export interface TipoEvento {
     idTipoEvento?: string;
     tituloTipoEvento?: string;
-    titulo?: string; // Adicionado para resolver o erro no TypeScript
+    titulo?: string;
 }
 
 export interface TipoUsuario {
     idTipoUsuario?: string;
     tituloTipoUsuario?: string;
     titulo?: string;
+}
+
+export interface Instituicao {
+    idInstituicao: string;
+    nomeFantasia?: string;
+    cnpj?: string;
+}
+
+export interface EventoPayload {
+    nome: string;
+    descricao: string;
+    dataEvento: string;
+    idTipoEvento: string;
+    idInstituicao: string;
+    arquivoImagem: File | null;
+    imagemUrl?: string | null;
 }
 
 export interface Evento {
@@ -34,6 +50,8 @@ export interface Evento {
     idTipoEvento?: string;
     idTipoEventoNavigation?: TipoEvento;
     tipoEvento?: TipoEvento;
+    idInstituicao?: string;
+    instituicao?: Instituicao;
 }
 
 export interface Usuario {

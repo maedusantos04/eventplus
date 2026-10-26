@@ -1,11 +1,13 @@
+
 import { useState, useEffect, useCallback } from "react";
-import "./PaginaAdministrador.css";
+import "./TipoEventoAdm.css";
 import ilustracaoTipoEvento from "../../assets/adm-tipo-evento.svg";
+import lixeira from "../../assets/lixeira.svg";
 import { tipoEventoService } from "../../services/eventPlusservice";
 import { getApiErrorMessage } from "../../services/api";
 import type { TipoEvento } from "../../types/api";
 
-function PaginaAdministrador() {
+function TipoEventoAdm() {
     const [titulo, setTitulo] = useState("");
     const [tipos, setTipos] = useState<TipoEvento[]>([]);
     const [carregando, setCarregando] = useState(false);
@@ -14,9 +16,9 @@ function PaginaAdministrador() {
     const carregarTipos = useCallback(async () => {
         setCarregando(true);
         setErro("");
+
         try {
             const dados = await tipoEventoService.listar();
-            console.log("Tipos de evento recebidos:", dados);
             setTipos(dados);
         } catch (error) {
             console.error("Erro ao carregar tipos de evento:", error);
@@ -32,16 +34,22 @@ function PaginaAdministrador() {
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
+
         if (!titulo.trim()) return;
 
         try {
             setCarregando(true);
-            await tipoEventoService.cadastrar({ tituloTipoEvento: titulo });
+            setErro("");
+
+            await tipoEventoService.cadastrar({
+                tituloTipoEvento: titulo.trim()
+            });
+
             setTitulo("");
             await carregarTipos();
         } catch (error) {
-            console.error("Erro ao cadastrar:", error);
-            alert("Não foi possível cadastrar o tipo de evento.");
+            console.error("Erro ao cadastrar tipo de evento:", error);
+            setErro(getApiErrorMessage(error));
         } finally {
             setCarregando(false);
         }
@@ -49,14 +57,18 @@ function PaginaAdministrador() {
 
     async function handleExcluir(id?: string) {
         if (!id) return;
-        if (!confirm("Deseja realmente excluir este tipo de evento?")) return;
+
+        if (!window.confirm("Deseja realmente excluir este tipo de evento?")) {
+            return;
+        }
 
         try {
+            setErro("");
             await tipoEventoService.excluir(id);
             await carregarTipos();
         } catch (error) {
-            console.error("Erro ao excluir:", error);
-            alert("Não foi possível excluir o tipo de evento.");
+            console.error("Erro ao excluir tipo de evento:", error);
+            setErro(getApiErrorMessage(error));
         }
     }
 
@@ -67,7 +79,10 @@ function PaginaAdministrador() {
 
                 <div className="admin-form-section">
                     <div className="admin-illustration">
-                        <img src={ilustracaoTipoEvento} alt="Ilustração Tipo de Eventos" />
+                        <img
+                            src={ilustracaoTipoEvento}
+                            alt="Ilustração Tipo de Eventos"
+                        />
                     </div>
 
                     <form onSubmit={handleSubmit} className="admin-form">
@@ -76,9 +91,14 @@ function PaginaAdministrador() {
                             placeholder="Título"
                             value={titulo}
                             onChange={(e) => setTitulo(e.target.value)}
+                            required
                         />
 
-                        <button type="submit" className="btn-cadastrar" disabled={carregando}>
+                        <button
+                            type="submit"
+                            className="btn-cadastrar"
+                            disabled={carregando}
+                        >
                             {carregando ? "Salvando..." : "Cadastrar"}
                         </button>
                     </form>
@@ -88,7 +108,11 @@ function PaginaAdministrador() {
             <section className="admin-list-section">
                 <h2>LISTA TIPO DE EVENTOS</h2>
 
-                {erro && <p style={{ color: "#fff", textAlign: "center", marginBottom: "1rem" }}>{erro}</p>}
+                {erro && <p className="admin-erro">{erro}</p>}
+
+                {carregando && tipos.length === 0 && !erro && (
+                    <p>Carregando tipos de eventos...</p>
+                )}
 
                 <table className="admin-table">
                     <thead>
@@ -97,24 +121,38 @@ function PaginaAdministrador() {
                             <th>Deletar</th>
                         </tr>
                     </thead>
+
                     <tbody>
                         {tipos.length === 0 && !carregando && !erro && (
                             <tr>
-                                <td colSpan={2} style={{ textAlign: "center" }}>
+                                <td colSpan={2}>
                                     Nenhum tipo de evento cadastrado.
                                 </td>
                             </tr>
                         )}
+
                         {tipos.map((item) => (
                             <tr key={item.idTipoEvento}>
-                                <td>{item.tituloTipoEvento || item.titulo || "Sem título"}</td>
+                                <td>
+                                    {item.tituloTipoEvento ||
+                                        item.titulo ||
+                                        "Sem título"}
+                                </td>
+
                                 <td>
                                     <button
+                                        type="button"
                                         className="btn-icon"
                                         title="Deletar"
-                                        onClick={() => handleExcluir(item.idTipoEvento)}
+                                        aria-label={`Deletar ${item.tituloTipoEvento ||
+                                            item.titulo ||
+                                            "tipo de evento"
+                                            }`}
+                                        onClick={() =>
+                                            handleExcluir(item.idTipoEvento)
+                                        }
                                     >
-                                        🗑️
+                                        <img src={lixeira} alt="" />
                                     </button>
                                 </td>
                             </tr>
@@ -126,4 +164,4 @@ function PaginaAdministrador() {
     );
 }
 
-export default PaginaAdministrador;
+export default TipoEventoAdm;
