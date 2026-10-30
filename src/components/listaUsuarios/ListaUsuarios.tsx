@@ -1,10 +1,10 @@
 import type { Usuario } from "../../types/api";
-import './ListaUsuarios.css'
+import "./ListaUsuarios.css";
 
 import lapis from "../../assets/lapis.svg";
 import lixeira from "../../assets/lixeira.svg";
 
-interface ListaUsuariosProps{
+interface ListaUsuariosProps {
     usuarios: Usuario[];
     idEmEdicao: string | null;
     carregando?: boolean;
@@ -12,8 +12,14 @@ interface ListaUsuariosProps{
     onExcluir: (usuario: Usuario) => void;
 }
 
-function ListaUsuarios({usuarios, idEmEdicao, carregando, onEditar, onExcluir } : ListaUsuariosProps){
-    return(
+function ListaUsuarios({
+    usuarios,
+    idEmEdicao,
+    carregando,
+    onEditar,
+    onExcluir
+}: ListaUsuariosProps) {
+    return (
         <section className="lista-tipos lista-usuarios">
             <div className="lista-tipos-conteudo">
                 <h2>Usuários Cadastrados</h2>
@@ -29,32 +35,67 @@ function ListaUsuarios({usuarios, idEmEdicao, carregando, onEditar, onExcluir } 
                             </tr>
                         </thead>
                         <tbody>
-                            {carregando ? <tr><td colSpan={5}
-                            className="lista-tipos-tabela-vazia">Carregando...</td></tr> : null}
-                            {!carregando && usuarios.length === 0? <tr><td colSpan={5} 
-                                className="lista-tipos-tabela-vazia">Nenhum usuário cadastrado</td></tr>
-                            : null
-                            }
-                            {!carregando && usuarios.map((usuario) => (
-                                <tr className={idEmEdicao === usuario.idUsuario ?
-                                    "lista-tipos-linha-ativa" : ""} key={usuario.idUsuario}>
+                            {carregando ? (
+                                <tr>
+                                    <td colSpan={5} className="lista-tipos-tabela-vazia">
+                                        Carregando...
+                                    </td>
+                                </tr>
+                            ) : null}
+
+                            {!carregando && usuarios.length === 0 ? (
+                                <tr>
+                                    <td colSpan={5} className="lista-tipos-tabela-vazia">
+                                        Nenhum usuário cadastrado.
+                                    </td>
+                                </tr>
+                            ) : null}
+
+                            {!carregando &&
+                                usuarios.map((usuario) => (
+                                    <tr
+                                        className={
+                                            idEmEdicao === usuario.idUsuario
+                                                ? "lista-tipos-linha-ativa"
+                                                : ""
+                                        }
+                                        key={usuario.idUsuario}
+                                    >
                                         <td>{usuario.nome}</td>
                                         <td>{usuario.email}</td>
-                                        <td>{usuario.idTipoUsuarioNavigation.titulo || "Não informado"}</td>
-                                        <td><button className="lista-tipos-acao"
-                                        type="button" aria-label={`Editar ${usuario.nome}`}
-                                        onClick={() => onEditar(usuario)}><img src={lapis}/></button></td>
-                                        <td><button className="lista-tipos-acao"
-                                        type="button" aria-label={`Excluir ${usuario.nome}`}
-                                        onClick={() => onExcluir(usuario)}><img src={lixeira}/></button></td>
+                                        <td>
+                                            {usuario.idTipoUsuarioNavigation?.titulo ??
+                                                usuario.idTipoUsuarioNavigation?.tituloTipoUsuario ??
+                                                "Não informado"}
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="lista-tipos-acao"
+                                                type="button"
+                                                aria-label={`Editar ${usuario.nome}`}
+                                                onClick={() => onEditar(usuario)}
+                                            >
+                                                <img src={lapis} alt="Ícone de edição" />
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button
+                                                className="lista-tipos-acao"
+                                                type="button"
+                                                aria-label={`Excluir ${usuario.nome}`}
+                                                onClick={() => onExcluir(usuario)}
+                                            >
+                                                <img src={lixeira} alt="Ícone de exclusão" />
+                                            </button>
+                                        </td>
                                     </tr>
-                            ))}
+                                ))}
                         </tbody>
                     </table>
                 </div>
             </div>
         </section>
-    )
+    );
 }
 
 export default ListaUsuarios;

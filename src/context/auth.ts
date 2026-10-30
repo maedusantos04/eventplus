@@ -1,4 +1,3 @@
-
 import { createContext, useContext } from "react";
 import type { AuthSession, LoginPayload, Usuario } from "../types/api";
 
@@ -15,7 +14,7 @@ export interface AuthContextValue {
 
 export const AuthContext = createContext<AuthContextValue | null>(null);
 
-export function useAuth() {
+export function useAuth(): AuthContextValue {
     const context = useContext(AuthContext);
 
     if (!context) {
@@ -25,20 +24,12 @@ export function useAuth() {
     return context;
 }
 
-export function perfilEhAdministrador(perfil: string) {
+export function perfilEhAdministrador(perfil: string): boolean {
     const nomePerfil = perfil.trim().toLowerCase();
-
-    return (
-        nomePerfil === "administrador" ||
-        nomePerfil === "admin"
-    );
+    return nomePerfil === "administrador" || nomePerfil === "admin";
 }
 
-export function perfilEhOrganizador(perfil: string) {
+export function perfilEhOrganizador(perfil: string): boolean {
     const nomePerfil = perfil.trim().toLowerCase();
-
-    return (
-        perfilEhAdministrador(nomePerfil) ||
-        nomePerfil === "organizador"
-    );
+    return perfilEhAdministrador(nomePerfil) || nomePerfil === "organizador";
 }

@@ -1,16 +1,18 @@
 export interface LoginPayload {
-    email?: string;
-    senha?: string;
+    email: string;
+    senha: string;
 }
 
 export interface LoginResponse {
     token: string;
-    usuario?: Usuario;
+    expiracao?: string;
+    usuario: Usuario;
 }
 
 export interface AuthSession {
     token: string;
-    usuario?: Usuario;
+    expiracao?: string;
+    usuario: Usuario;
 }
 
 export interface TipoEvento {
@@ -29,15 +31,16 @@ export interface Instituicao {
     idInstituicao: string;
     nomeFantasia?: string;
     cnpj?: string;
+    endereco?: string;
 }
 
 export interface EventoPayload {
     nome: string;
     descricao: string;
     dataEvento: string;
-    idTipoEvento: string;
-    idInstituicao: string;
-    arquivoImagem: File | null;
+    idTipoEvento?: string | null;
+    idInstituicao?: string | null;
+    arquivoImagem?: File | null;
     imagemUrl?: string | null;
 }
 
@@ -46,12 +49,12 @@ export interface Evento {
     nome: string;
     descricao: string;
     dataEvento: string;
-    imagemUrl?: string;
-    idTipoEvento?: string;
-    idTipoEventoNavigation?: TipoEvento;
-    tipoEvento?: TipoEvento;
-    idInstituicao?: string;
-    instituicao?: Instituicao;
+    imagemUrl?: string | null;
+    idTipoEvento?: string | null;
+    idTipoEventoNavigation?: TipoEvento | null;
+    tipoEvento?: TipoEvento | null;
+    idInstituicao?: string | null;
+    idInstituicaoNavigation?: Instituicao | null;
 }
 
 export interface Usuario {
@@ -59,46 +62,50 @@ export interface Usuario {
     nome: string;
     email: string;
     idTipoUsuario?: string;
-    idTipoUsuarioNavigation?: TipoUsuario;
+    idTipoUsuarioNavigation?: TipoUsuario | null;
 }
 
 export interface UsuarioPayload {
     nome: string;
     email: string;
     senha?: string;
-    idTipoUsuario: string;
+    idTipoUsuario?: string | null;
 }
 
 export interface Comentario {
     idComentario: string;
     descricao: string;
+    dataComentario: string;
     exibe?: boolean;
-    idUsuario?: string;
-    idEvento?: string;
+    idEvento: string;
+    idUsuario?: string | null;
+    idUsuarioNavigation?: Usuario | null;
     usuario?: Usuario;
     evento?: Evento;
 }
 
 export interface ComentarioPayload {
     descricao: string;
-    idUsuario: string;
     idEvento: string;
+    idUsuario?: string | null;
 }
 
 export interface MensagemModeracao {
-    mensagem?: string;
+    mensagem: string;
+    motivo?: string;
 }
 
 export interface Presenca {
     idPresenca: string;
     situacao: boolean;
-    idUsuario: string;
     idEvento: string;
+    idUsuario?: string | null;
+    idEventoNavigation?: Evento | null;
     evento?: Evento;
 }
 
 export interface PresencaPayload {
     situacao: boolean;
-    idUsuario: string;
     idEvento: string;
+    idUsuario?: string | null;
 }

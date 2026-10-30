@@ -1,0 +1,276 @@
+:root {
+    --cinza-claro: #ded9da;
+    --cinza-linha: #757575;
+    --branco: #ffffff;
+    --cor-texto: #17143f;
+    --vermelho: #b51d44;
+    --vermelho-escuro: #821b47;
+}
+
+.cadastro-evento-page {
+    width: min(1080px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 40px 0 64px;
+    color: var(--cor-texto);
+}
+
+.cadastro-evento-page > section:first-child {
+    margin-bottom: 48px;
+    text-align: center;
+}
+
+.cadastro-evento-page h1 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 0;
+    color: var(--cor-texto);
+    display: inline-block;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.cadastro-evento-page h1::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--vermelho);
+    border-radius: 2px;
+}
+
+.cadastro-evento-conteudo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 48px;
+    margin-bottom: 64px;
+}
+
+.cadastro-evento-ilustracao {
+    flex: 1;
+    background-color: #f2f2f2;
+    border-radius: 50px;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cadastro-evento-ilustracao img {
+    max-width: 100%;
+    height: auto;
+    max-height: 280px;
+}
+
+.cadastro-evento-page form {
+    flex: 1;
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    text-align: left;
+}
+
+.cadastro-evento-page form h2 {
+    display: none;
+}
+
+.cadastro-evento-form-row {
+    display: flex;
+    gap: 24px;
+}
+
+.cadastro-evento-select-label {
+    flex: 1;
+}
+
+.cadastro-evento-page input:not([type="file"]),
+.cadastro-evento-page textarea,
+.cadastro-evento-page select {
+    width: 100%;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 1.5px solid var(--cinza-linha);
+    border-radius: 0;
+    background: transparent;
+    font-size: 14px;
+    color: var(--cor-texto);
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.cadastro-evento-page input:focus,
+.cadastro-evento-page textarea:focus,
+.cadastro-evento-page select:focus {
+    border-bottom-color: var(--vermelho);
+}
+
+.cadastro-evento-upload-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 4px;
+    border: none;
+    border-bottom: 1.5px solid var(--cinza-linha);
+    border-radius: 0;
+    color: #757575;
+    background: transparent;
+    cursor: pointer;
+    font-size: 14px;
+    transition: border-color 0.2s;
+}
+
+.cadastro-evento-upload-label:hover {
+    border-bottom-color: var(--vermelho);
+}
+
+.cadastro-evento-upload-icone {
+    font-size: 16px;
+    margin-left: 8px;
+}
+
+/* Barra de progresso do upload */
+.cadastro-evento-progresso-container {
+    width: 100%;
+    background-color: #f0eded;
+    border-radius: 8px;
+    overflow: hidden;
+    height: 18px;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.cadastro-evento-progresso-barra {
+    height: 100%;
+    background: linear-gradient(90deg, var(--vermelho), #0050fb);
+    transition: width 0.2s ease;
+}
+
+.cadastro-evento-progresso-texto {
+    position: absolute;
+    width: 100%;
+    text-align: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #333;
+}
+
+.btn-cadastrar {
+    background-color: var(--vermelho, #b51d44);
+    color: white;
+    border: none;
+    padding: 12px;
+    border-radius: 6px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 600;
+    width: 100%;
+}
+
+.btn-cadastrar:hover:not(:disabled) {
+    background-color: var(--vermelho-escuro, #821b47);
+}
+
+.btn-cadastrar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.cadastro-evento-cancelar {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--vermelho);
+    background: transparent;
+    color: var(--vermelho);
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.cadastro-evento-cancelar:hover {
+    background-color: #fff0f3;
+}
+
+.cadastro-evento-page form [role="status"] {
+    padding: 10px;
+    background-color: #fff3f5;
+    color: var(--vermelho-escuro);
+    border-radius: 6px;
+    margin: 0;
+    font-size: 13px;
+    text-align: center;
+}
+
+.cadastro-evento-lista-section {
+    text-align: center;
+    margin-top: 48px;
+}
+
+.cadastro-evento-lista-section h2 {
+    font-size: 16px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 8px;
+}
+
+.cadastro-evento-lista-section h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--vermelho);
+    border-radius: 2px;
+}
+
+.cadastro-evento-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+    justify-items: center;
+}
+
+@media (max-width: 860px) {
+    .cadastro-evento-conteudo {
+        flex-direction: column;
+    }
+
+    .cadastro-evento-cards-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .cadastro-evento-form-row {
+        flex-direction: column;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 520px) {
+    .cadastro-evento-cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .cadastro-evento-page {
+        width: calc(100% - 32px);
+    }
+}

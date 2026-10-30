@@ -1,50 +1,165 @@
-/* Página de eventos */
-.eventos-container {
-    max-width: 1080px;
-    margin: 40px auto 60px;
-    padding: 0 20px;
+:root {
+    --cinza-claro: #ded9da;
+    --branco: #ffffff;
+    --cor-texto: #17143f;
+    --vermelho: #b51d44;
+    --vermelho-escuro: #821b47;
+    --azul-claro: rgba(0, 80, 251, 0.12);
 }
 
-.titulo-eventos {
-    font-size: 32px;
-    color: #17143f;
-    margin-bottom: 25px;
-    font-weight: 600;
-}
-
-/* Grade dos cards */
-.eventos-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 250px));
+.home-evento-card {
+    border: 1px solid var(--cinza-claro);
+    border-radius: 12px;
+    overflow: hidden;
+    width: 100%;
+    max-width: 280px;
+    background: var(--branco);
+    display: flex;
+    flex-direction: column;
     justify-content: space-between;
-    gap: 28px 30px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-/* Responsividade */
-@media (max-width: 850px) {
-    .eventos-grid {
-        grid-template-columns: repeat(2, minmax(0, 250px));
-        justify-content: center;
-        gap: 25px;
-    }
+.home-evento-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
-@media (max-width: 580px) {
-    .eventos-container {
-        margin-top: 25px;
-    }
+.home-evento-card-ativo {
+    border-color: var(--vermelho);
+    box-shadow: 0 0 0 2px var(--vermelho);
+}
 
-    .titulo-eventos {
-        font-size: 26px;
-    }
+.home-evento-card img {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+}
 
-    .eventos-grid {
-        grid-template-columns: minmax(0, 1fr);
-    }
+.home-evento-card-categoria {
+    background-color: var(--azul-claro);
+    color: #0046c7;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 12px;
+    padding: 4px 12px;
+    display: inline-block;
+    align-self: flex-start;
+    margin: 12px 16px 0;
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
-    .home-evento-card {
-        width: 100%;
-        max-width: 320px;
-        margin: 0 auto;
-    }
+.home-evento-card-info {
+    padding: 12px 16px 16px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+    gap: 8px;
+    text-align: left;
+}
+
+.home-evento-card-info h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--cor-texto);
+    margin: 0;
+    line-height: 1.3;
+}
+
+.home-evento-card-info p {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.home-evento-card-link {
+    display: inline-block;
+    color: var(--vermelho);
+    font-weight: 700;
+    font-size: 0.9rem;
+    text-decoration: none;
+    margin-top: 12px;
+    transition: color 0.2s;
+}
+
+.home-evento-card-link:hover {
+    color: var(--vermelho-escuro);
+    text-decoration: underline;
+}
+
+.home-evento-card-acoes {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #f0eded;
+    flex-wrap: wrap;
+}
+
+.home-evento-card-editando {
+    width: 100%;
+    font-size: 0.75rem;
+    color: var(--vermelho);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.home-evento-card-btn-ver {
+    color: var(--cor-texto);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    background: #f4f4f4;
+    transition: background 0.2s;
+}
+
+.home-evento-card-btn-ver:hover {
+    background: #e5e5e5;
+}
+
+.home-evento-card-btn-editar {
+    border: none;
+    background: transparent;
+    color: #0050fb;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.home-evento-card-btn-editar:hover {
+    background: rgba(0, 80, 251, 0.08);
+}
+
+.home-evento-card-btn-excluir {
+    border: none;
+    background: transparent;
+    color: var(--vermelho);
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+.home-evento-card-btn-excluir:hover {
+    background: #fff0f3;
 }

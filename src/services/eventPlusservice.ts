@@ -17,15 +17,19 @@ import type {
     UsuarioPayload
 } from "../types/api";
 
-function eventoFormData(payload: EventoPayload) {
+function eventoFormData(payload: EventoPayload): FormData {
     const formData = new FormData();
     formData.append("Nome", payload.nome);
     formData.append("Descricao", payload.descricao);
     formData.append("DataEvento", payload.dataEvento);
     formData.append("IdTipoEvento", payload.idTipoEvento || "");
     formData.append("IdInstituicao", payload.idInstituicao || "");
-    if (payload.arquivoImagem) formData.append("ArquivoImagem", payload.arquivoImagem);
-    if (payload.imagemUrl) formData.append("ImagemUrl", payload.imagemUrl);
+    if (payload.arquivoImagem) {
+        formData.append("ArquivoImagem", payload.arquivoImagem);
+    }
+    if (payload.imagemUrl) {
+        formData.append("ImagemUrl", payload.imagemUrl);
+    }
     return formData;
 }
 
@@ -84,8 +88,14 @@ export const eventoService = {
     },
 
     async listarProximos() {
-        const { data } = await axiosInstance.get<Evento[]>("Evento");
+        try {
+            const { data } = await axiosInstance.get<Evento[]>("Evento/proximos");
+            if (Array.isArray(data) && data.length > 0) return data;
+        } catch {
+            // Fallback caso a API não tenha a rota dedicada
+        }
 
+        const { data } = await axiosInstance.get<Evento[]>("Evento");
         return data
             .filter((evento) => new Date(evento.dataEvento) >= new Date())
             .sort(
@@ -104,10 +114,17 @@ export const eventoService = {
 
 export const comentarioService = {
     async listarPorEvento(idEvento: string) {
-        const { data } = await axiosInstance.get<Comentario[]>(
-            `Comentario/ListarPorEvento/${idEvento}`
-        );
-        return data;
+        try {
+            const { data } = await axiosInstance.get<Comentario[]>(
+                `Comentario/evento/${idEvento}`
+            );
+            return data;
+        } catch {
+            const { data } = await axiosInstance.get<Comentario[]>(
+                `Comentario/ListarPorEvento/${idEvento}`
+            );
+            return data;
+        }
     },
 
     async cadastrar(payload: ComentarioPayload) {
@@ -174,16 +191,21 @@ export const tipoUsuarioService = {
         return data;
     },
 
-    async cadastrar(titulo: string) {
-        const { data } = await axiosInstance.post<TipoUsuario>(
-            "TipoUsuario",
-            { titulo }
-        );
+    async cadastrar(payload: string | { titulo?: string; tituloTipoUsuario?: string }) {
+        const titulo = typeof payload === "string" ? payload : (payload.titulo ?? payload.tituloTipoUsuario ?? "");
+        const { data } = await axiosInstance.post<TipoUsuario>("TipoUsuario", {
+            titulo,
+            tituloTipoUsuario: titulo
+        });
         return data;
     },
 
-    async atualizar(id: string, titulo: string) {
-        await axiosInstance.put(`TipoUsuario/${id}`, { titulo });
+    async atualizar(id: string, payload: string | { titulo?: string; tituloTipoUsuario?: string }) {
+        const titulo = typeof payload === "string" ? payload : (payload.titulo ?? payload.tituloTipoUsuario ?? "");
+        await axiosInstance.put(`TipoUsuario/${id}`, {
+            titulo,
+            tituloTipoUsuario: titulo
+        });
     },
 
     async excluir(id: string) {
@@ -197,19 +219,24 @@ export const tipoEventoService = {
         return data;
     },
 
-    async cadastrar(payload: { tituloTipoEvento: string }) {
-        const { data } = await axiosInstance.post<TipoEvento>(
-            "TipoEvento",
-            payload
-        );
+    async cadastrar(payload: string | { titulo?: string; tituloTipoEvento?: string }) {
+        const titulo = typeof payload === "string" ? payload : (payload.titulo ?? payload.tituloTipoEvento ?? "");
+        const { data } = await axiosInstance.post<TipoEvento>("TipoEvento", {
+            titulo,
+            tituloTipoEvento: titulo
+        });
         return data;
     },
 
     async atualizar(
         id: string,
-        payload: { tituloTipoEvento: string }
+        payload: string | { titulo?: string; tituloTipoEvento?: string }
     ) {
-        await axiosInstance.put(`TipoEvento/${id}`, payload);
+        const titulo = typeof payload === "string" ? payload : (payload.titulo ?? payload.tituloTipoEvento ?? "");
+        await axiosInstance.put(`TipoEvento/${id}`, {
+            titulo,
+            tituloTipoEvento: titulo
+        });
     },
 
     async excluir(id: string) {

@@ -1,6 +1,7 @@
-
 import { useState, useEffect, useCallback } from "react";
 import "./TipoEventoAdm.css";
+import Header from "../../components/header/Header";
+import Footer from "../../components/footer/Footer";
 import ilustracaoTipoEvento from "../../assets/adm-tipo-evento.svg";
 import lixeira from "../../assets/lixeira.svg";
 import { tipoEventoService } from "../../services/eventPlusservice";
@@ -29,7 +30,10 @@ function TipoEventoAdm() {
     }, []);
 
     useEffect(() => {
-        void carregarTipos();
+        const timeout = window.setTimeout(() => {
+            void carregarTipos();
+        }, 0);
+        return () => window.clearTimeout(timeout);
     }, [carregarTipos]);
 
     async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -42,7 +46,8 @@ function TipoEventoAdm() {
             setErro("");
 
             await tipoEventoService.cadastrar({
-                tituloTipoEvento: titulo.trim()
+                tituloTipoEvento: titulo.trim(),
+                titulo: titulo.trim()
             });
 
             setTitulo("");
@@ -73,94 +78,101 @@ function TipoEventoAdm() {
     }
 
     return (
-        <div className="admin-container">
-            <main className="admin-main">
-                <h2>ADMINISTRAÇÃO TIPO DE EVENTOS</h2>
+        <>
+            <Header />
 
-                <div className="admin-form-section">
-                    <div className="admin-illustration">
-                        <img
-                            src={ilustracaoTipoEvento}
-                            alt="Ilustração Tipo de Eventos"
-                        />
+            <div className="admin-container">
+                <main className="admin-main">
+                    <h2>ADMINISTRAÇÃO TIPO DE EVENTOS</h2>
+
+                    <div className="admin-form-section">
+                        <div className="admin-illustration">
+                            <img
+                                src={ilustracaoTipoEvento}
+                                alt="Ilustração Tipo de Eventos"
+                            />
+                        </div>
+
+                        <form onSubmit={handleSubmit} className="admin-form">
+                            <input
+                                type="text"
+                                placeholder="Título"
+                                value={titulo}
+                                onChange={(e) => setTitulo(e.target.value)}
+                                required
+                            />
+
+                            <button
+                                type="submit"
+                                className="btn-cadastrar"
+                                disabled={carregando}
+                            >
+                                {carregando ? "Salvando..." : "Cadastrar"}
+                            </button>
+                        </form>
                     </div>
+                </main>
 
-                    <form onSubmit={handleSubmit} className="admin-form">
-                        <input
-                            type="text"
-                            placeholder="Título"
-                            value={titulo}
-                            onChange={(e) => setTitulo(e.target.value)}
-                            required
-                        />
+                <section className="admin-list-section">
+                    <h2>LISTA TIPO DE EVENTOS</h2>
 
-                        <button
-                            type="submit"
-                            className="btn-cadastrar"
-                            disabled={carregando}
-                        >
-                            {carregando ? "Salvando..." : "Cadastrar"}
-                        </button>
-                    </form>
-                </div>
-            </main>
+                    {erro && <p className="admin-erro">{erro}</p>}
 
-            <section className="admin-list-section">
-                <h2>LISTA TIPO DE EVENTOS</h2>
+                    {carregando && tipos.length === 0 && !erro && (
+                        <p>Carregando tipos de eventos...</p>
+                    )}
 
-                {erro && <p className="admin-erro">{erro}</p>}
-
-                {carregando && tipos.length === 0 && !erro && (
-                    <p>Carregando tipos de eventos...</p>
-                )}
-
-                <table className="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Título</th>
-                            <th>Deletar</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        {tipos.length === 0 && !carregando && !erro && (
+                    <table className="admin-table">
+                        <thead>
                             <tr>
-                                <td colSpan={2}>
-                                    Nenhum tipo de evento cadastrado.
-                                </td>
+                                <th>Título</th>
+                                <th>Deletar</th>
                             </tr>
-                        )}
+                        </thead>
 
-                        {tipos.map((item) => (
-                            <tr key={item.idTipoEvento}>
-                                <td>
-                                    {item.tituloTipoEvento ||
-                                        item.titulo ||
-                                        "Sem título"}
-                                </td>
+                        <tbody>
+                            {tipos.length === 0 && !carregando && !erro && (
+                                <tr>
+                                    <td colSpan={2}>
+                                        Nenhum tipo de evento cadastrado.
+                                    </td>
+                                </tr>
+                            )}
 
-                                <td>
-                                    <button
-                                        type="button"
-                                        className="btn-icon"
-                                        title="Deletar"
-                                        aria-label={`Deletar ${item.tituloTipoEvento ||
+                            {tipos.map((item) => (
+                                <tr key={item.idTipoEvento}>
+                                    <td>
+                                        {item.tituloTipoEvento ||
                                             item.titulo ||
-                                            "tipo de evento"
+                                            "Sem título"}
+                                    </td>
+
+                                    <td>
+                                        <button
+                                            type="button"
+                                            className="btn-icon"
+                                            title="Deletar"
+                                            aria-label={`Deletar ${
+                                                item.tituloTipoEvento ||
+                                                item.titulo ||
+                                                "tipo de evento"
                                             }`}
-                                        onClick={() =>
-                                            handleExcluir(item.idTipoEvento)
-                                        }
-                                    >
-                                        <img src={lixeira} alt="" />
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </section>
-        </div>
+                                            onClick={() =>
+                                                handleExcluir(item.idTipoEvento)
+                                            }
+                                        >
+                                            <img src={lixeira} alt="Excluir" />
+                                        </button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+
+            <Footer />
+        </>
     );
 }
 

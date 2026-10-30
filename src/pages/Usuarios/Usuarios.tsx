@@ -1,22 +1,27 @@
-import "./Usuarios.css";
-
-import { useCallback, useEffect, useState, type ChangeEvent, type FormEvent } from "react";
+import {
+    useCallback,
+    useEffect,
+    useState,
+    type ChangeEvent,
+    type FormEvent
+} from "react";
 
 import Footer from "../../components/footer/Footer";
 import Header from "../../components/header/Header";
 import Campo from "../../components/campo/Campo";
-import { Botao } from "../../components/botao/Botao";
+import Botao from "../../components/botao/Botao";
 import ModalConfirmacao from "../../components/modalConfirmacao/ModalConfirmacao";
 import ListaUsuarios from "../../components/listaUsuarios/ListaUsuarios";
+import ilustracaoAdmin from "../../assets/admin-illustration.png";
 
 import type { TipoUsuario, Usuario } from "../../types/api";
-
 import {
     tipoUsuarioService,
     usuarioService
 } from "../../services/eventPlusservice";
-
 import { getApiErrorMessage } from "../../services/api";
+
+import "./Usuarios.css";
 
 interface FormularioUsuario {
     nome: string;
@@ -112,8 +117,10 @@ function Usuarios() {
 
             if (idEmEdicao) {
                 await usuarioService.atualizar(idEmEdicao, payload);
+                setMensagem("Usuário atualizado com sucesso.");
             } else {
                 await usuarioService.cadastrar(payload);
+                setMensagem("Usuário cadastrado com sucesso.");
             }
 
             limpar();
@@ -135,7 +142,7 @@ function Usuarios() {
             senha: ""
         });
 
-        setMensagem("Informe uma nova senha para concluir a edição.");
+        setMensagem(`Editando "${usuario.nome}". Informe uma nova senha para concluir a edição.`);
 
         window.scrollTo({
             top: 0,
@@ -157,6 +164,7 @@ function Usuarios() {
             }
 
             setSelecionado(null);
+            setMensagem("Usuário excluído com sucesso.");
             await carregar();
         } catch (error) {
             setMensagem(getApiErrorMessage(error));
@@ -172,19 +180,26 @@ function Usuarios() {
 
             <main className="cadastro-usuario-page">
                 <section className="cadastro-usuario-formulario-section">
-                    <h1 className="section-title">
-                        Administração de usuários
+                    <h1 className="cadastro-usuario-titulo">
+                        Administração de Usuários
                     </h1>
 
                     <div className="cadastro-usuario-conteudo">
+                        <div className="cadastro-usuario-ilustracao">
+                            <img
+                                src={ilustracaoAdmin}
+                                alt="Ilustração da administração de usuários"
+                            />
+                        </div>
+
                         <form
-                            className="cadasto-usuario-formulario"
+                            className="cadastro-usuario-formulario"
                             onSubmit={salvar}
                         >
                             <h2>
                                 {idEmEdicao
                                     ? "Editar Usuário"
-                                    : "Cadastrar usuário"}
+                                    : "Cadastrar Usuário"}
                             </h2>
 
                             <label
@@ -193,7 +208,6 @@ function Usuarios() {
                             >
                                 Nome
                             </label>
-
                             <Campo
                                 id="usuario-nome"
                                 name="nome"
@@ -211,7 +225,6 @@ function Usuarios() {
                             >
                                 E-mail
                             </label>
-
                             <Campo
                                 id="usuario-email"
                                 name="email"
@@ -219,7 +232,6 @@ function Usuarios() {
                                 value={formulario.email}
                                 onChange={atualizar}
                                 placeholder="E-mail"
-                                maxLength={100}
                                 required
                             />
 
@@ -229,9 +241,8 @@ function Usuarios() {
                                         className="visually-hidden"
                                         htmlFor="usuario-tipo"
                                     >
-                                        Tipo de usuário
+                                        Tipo de Usuário
                                     </label>
-
                                     <select
                                         name="idTipoUsuario"
                                         id="usuario-tipo"
@@ -239,16 +250,13 @@ function Usuarios() {
                                         onChange={atualizar}
                                         required
                                     >
-                                        <option value="" disabled>
-                                            Selecione o tipo
-                                        </option>
-
+                                        <option value="">Selecione o tipo</option>
                                         {tipos.map((tipo) => (
                                             <option
                                                 value={tipo.idTipoUsuario}
                                                 key={tipo.idTipoUsuario}
                                             >
-                                                {tipo.titulo}
+                                                {tipo.titulo ?? tipo.tituloTipoUsuario}
                                             </option>
                                         ))}
                                     </select>
@@ -261,7 +269,6 @@ function Usuarios() {
                                     >
                                         Senha
                                     </label>
-
                                     <Campo
                                         id="usuario-senha"
                                         name="senha"
@@ -270,10 +277,10 @@ function Usuarios() {
                                         onChange={atualizar}
                                         placeholder={
                                             idEmEdicao
-                                                ? "Nova senha"
+                                                ? "Nova Senha (obrigatória)"
                                                 : "Senha"
                                         }
-                                        minLength={8}
+                                        minLength={6}
                                         maxLength={60}
                                         required
                                     />
@@ -281,15 +288,16 @@ function Usuarios() {
                             </div>
 
                             <Botao
+                                className="btn-cadastrar"
                                 texto={
                                     enviando
                                         ? "Salvando..."
                                         : idEmEdicao
-                                          ? "Salvar"
-                                          : "Cadastrar"
+                                        ? "Salvar alterações"
+                                        : "Cadastrar"
                                 }
                                 type="submit"
-                                disabled={enviando}
+                                disabled={enviando || carregando}
                             />
 
                             {idEmEdicao && (
@@ -299,7 +307,7 @@ function Usuarios() {
                                     onClick={limpar}
                                     disabled={enviando}
                                 >
-                                    Cancelar edição
+                                    Cancelar Edição
                                 </button>
                             )}
 
@@ -325,10 +333,10 @@ function Usuarios() {
 
                 <ModalConfirmacao
                     show={Boolean(selecionado)}
-                    titulo="Excluir usuário"
+                    titulo="Excluir Usuário"
                     mensagem={
                         selecionado
-                            ? `Deseja excluir "${selecionado.nome}"?`
+                            ? `Deseja realmente excluir o usuário "${selecionado.nome}"?`
                             : ""
                     }
                     textoConfirmar={enviando ? "Excluindo..." : "Excluir"}

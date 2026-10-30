@@ -4,74 +4,275 @@
     --cor-texto: #17143f;
     --vermelho: #b51d44;
     --vermelho-escuro: #821b47;
+    --azul-claro: rgba(0, 80, 251, 0.12);
 }
+
 .detalhes-evento-pagina {
     min-height: 80vh;
-    padding: 40px 0 64px;
+    padding: 32px 0 64px;
     background: var(--branco);
 }
+
 .detalhes-evento-container {
-    width: min(1000px, calc(100% - 48px));
+    width: min(1140px, calc(100% - 48px));
     margin: 0 auto;
     color: var(--cor-texto);
 }
+
+.detalhes-evento-voltar {
+    display: inline-block;
+    color: var(--vermelho);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+    transition: transform 0.2s;
+}
+
+.detalhes-evento-voltar:hover {
+    transform: translateX(-4px);
+    text-decoration: underline;
+}
+
+.detalhes-evento-aviso {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.detalhes-evento-erro {
+    padding: 12px 16px;
+    background-color: #fff3f5;
+    color: var(--vermelho);
+    border-radius: 8px;
+    margin-bottom: 24px;
+}
+
+.detalhes-evento-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 40px;
+    align-items: start;
+}
+
 .detalhes-evento-imagem {
     display: block;
     width: 100%;
-    max-height: 450px;
+    max-height: 420px;
+    aspect-ratio: 16 / 9;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 12px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
-.detalhes-evento-conteudo {
-    padding: 28px 0;
+
+.detalhes-evento-titulo {
+    margin: 24px 0 16px;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cor-texto);
+    line-height: 1.3;
 }
-.detalhes-evento-id {
-    color: var(--vermelho-escuro);
-    font-size: 0.9rem;
-}
-.detalhes-evento-conteudo h1 {
-    margin-bottom: 24px;
-    font-size: 2rem;
-    font-weight: 600;
-}
+
 .detalhes-evento-abas {
     display: flex;
-    gap: 24px;
-    border-bottom: 1px solid var(--cinza-claro);
+    gap: 20px;
+    border-bottom: 2px solid #f0eded;
+    margin-bottom: 24px;
 }
+
 .detalhes-evento-abas button {
-    padding: 12px 4px;
+    padding: 12px 6px;
     border: none;
     border-bottom: 3px solid transparent;
     background: transparent;
-    color: var(--cor-texto);
-    font: inherit;
+    color: #666;
+    font-size: 1rem;
+    font-weight: 600;
     cursor: pointer;
+    transition: all 0.2s;
 }
+
 .detalhes-evento-abas button.ativo {
     border-bottom-color: var(--vermelho);
     color: var(--vermelho);
-    font-weight: 600;
 }
+
 .detalhes-evento-descricao {
-    padding: 24px 0;
-    line-height: 1.7;
+    line-height: 1.8;
+    color: #444;
+    font-size: 1rem;
 }
+
 .detalhes-evento-descricao h2 {
-    margin-bottom: 16px;
-    font-size: 1.3rem;
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    color: var(--cor-texto);
 }
-.detalhes-evento-container a {
+
+/* Seção de comentários */
+.detalhes-evento-comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.detalhes-evento-comentario-form {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.detalhes-evento-comentario-form .campo {
+    flex: 1;
+}
+
+.detalhes-evento-btn-enviar {
+    border: none;
+    background: var(--vermelho);
+    color: var(--branco);
+    width: 44px;
+    height: 44px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    flex-shrink: 0;
+}
+
+.detalhes-evento-btn-enviar:hover:not(:disabled) {
+    background-color: var(--vermelho-escuro);
+}
+
+.detalhes-evento-btn-enviar:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.detalhes-evento-btn-enviar img {
+    width: 20px;
+    height: 20px;
+    filter: brightness(0) invert(1);
+}
+
+.detalhes-evento-mensagem {
+    padding: 10px 14px;
+    background-color: #fff3f5;
     color: var(--vermelho);
+    border-radius: 6px;
+    font-size: 0.9rem;
 }
-@media (max-width: 600px) {
-    .detalhes-evento-container {
-        width: calc(100% - 32px);
-    }
-    .detalhes-evento-conteudo h1 {
-        font-size: 1.6rem;
-    }
-    .detalhes-evento-imagem {
-        max-height: 260px;
+
+.detalhes-evento-comentarios-lista {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detalhes-evento-comentario-vazio {
+    color: #888;
+    font-style: italic;
+    padding: 16px 0;
+}
+
+.detalhes-evento-comentario-card {
+    background: #fdfafb;
+    border: 1px solid #f0eded;
+    border-radius: 8px;
+    padding: 14px 18px;
+}
+
+.detalhes-evento-comentario-topo {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.detalhes-evento-comentario-topo strong {
+    color: var(--cor-texto);
+    font-size: 0.95rem;
+}
+
+.detalhes-evento-comentario-topo time {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.detalhes-evento-comentario-card p {
+    margin: 0;
+    color: #444;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+/* Sidebar com Informações principais */
+.detalhes-evento-sidebar {
+    background: #faf9f9;
+    border: 1px solid #eee;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.detalhes-evento-sidebar h2 {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--cor-texto);
+    margin: 0;
+}
+
+.detalhes-evento-sidebar hr {
+    border: none;
+    border-top: 1px solid #e0dede;
+    margin: 0;
+}
+
+.detalhes-evento-info-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.detalhes-evento-info-item img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.8;
+}
+
+.detalhes-evento-acao-wrapper {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.detalhes-evento-sidebar .botao {
+    width: 100%;
+}
+
+.detalhes-evento-btn-cancelar {
+    background-color: #888 !important;
+}
+
+.detalhes-evento-btn-cancelar:hover {
+    background-color: #666 !important;
+}
+
+.detalhes-evento-mensagem-inscricao {
+    font-size: 0.85rem;
+    text-align: center;
+    color: var(--vermelho);
+    margin: 0;
+}
+
+@media (max-width: 860px) {
+    .detalhes-evento-grid {
+        grid-template-columns: 1fr;
     }
 }

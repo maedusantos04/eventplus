@@ -1,0 +1,105 @@
+:root {
+    --cinza-claro: #ded9da;
+    --branco: #ffffff;
+    --cor-texto: #17143f;
+    --vermelho: #b51d44;
+    --vermelho-escuro: #821b47;
+}
+
+.lista-usuarios {
+    width: 100%;
+    background-color: var(--vermelho);
+    color: var(--branco);
+    padding: 48px 24px 80px;
+    margin-top: 48px;
+}
+
+.lista-tipos-conteudo {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.lista-tipos-conteudo h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    position: relative;
+    padding-bottom: 8px;
+    color: var(--branco);
+}
+
+.lista-tipos-conteudo h2::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background-color: var(--branco);
+    border-radius: 2px;
+}
+
+.lista-tipos-tabela-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.lista-usuarios-tabela {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.lista-usuarios-tabela th {
+    padding: 14px 16px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.lista-usuarios-tabela td {
+    padding: 14px 16px;
+    font-size: 0.9rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.lista-tipos-linha-ativa {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.lista-tipos-tabela-vazia {
+    text-align: center;
+    padding: 32px;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.lista-tipos-acao {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.lista-tipos-acao:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.lista-tipos-acao img {
+    width: 18px;
+    height: 18px;
+    filter: brightness(0) invert(1);
+}

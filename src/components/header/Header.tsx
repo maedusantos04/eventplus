@@ -1,83 +1,106 @@
-
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate, useLocation } from "react-router-dom";
 
 import logoEvent from "../../assets/logo1.svg";
 import "./Header.css";
-
-import { useAuth } from "../../context/auth";
+import { perfilEhAdministrador, perfilEhOrganizador, useAuth } from "../../context/auth";
 
 function Header() {
     const { autenticado, perfil, logout } = useAuth();
-
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const nomePerfil = String(perfil ?? "")
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .trim()
-        .toLowerCase();
-
-    const administrador =
-        autenticado &&
-        (nomePerfil.includes("admin") ||
-            nomePerfil.includes("administrador"));
-
-    const organizador =
-        autenticado &&
-        (nomePerfil.includes("organizador") ||
-            administrador);
+    const administrador = perfilEhAdministrador(perfil);
+    const organizador = perfilEhOrganizador(perfil);
 
     function sair() {
         logout();
         navigate("/login");
     }
 
+    function irParaContato(e: React.MouseEvent) {
+        if (location.pathname === "/home" || location.pathname === "/") {
+            e.preventDefault();
+            const el = document.getElementById("contato");
+            if (el) {
+                el.scrollIntoView({ behavior: "smooth" });
+                window.history.pushState(null, "", "#contato");
+            }
+        }
+    }
+
     return (
         <header className="header">
             <div className="header-conteudo">
-                <Link to="/home">
+                <Link to="/home" className="header-logo-link">
                     <img src={logoEvent} alt="Logo Event+" />
                 </Link>
 
-                <nav>
-                    <NavLink to="/home">Home</NavLink>
+                <nav className="header-nav">
+                    <NavLink
+                        to="/home"
+                        className={({ isActive }) => (isActive ? "header-link-ativo" : "")}
+                    >
+                        Home
+                    </NavLink>
 
-                    <NavLink to="/eventos">Eventos</NavLink>
+                    <NavLink
+                        to="/eventos"
+                        className={({ isActive }) => (isActive ? "header-link-ativo" : "")}
+                    >
+                        Eventos
+                    </NavLink>
+
+                    {organizador && (
+                        <NavLink
+                            to="/cadastroEvento"
+                            className={({ isActive }) => (isActive ? "header-link-ativo" : "")}
+                        >
+                            Cadastro de Eventos
+                        </NavLink>
+                    )}
 
                     {administrador && (
                         <>
-                            <NavLink to="/usuarios">
+                            <NavLink
+                                to="/tipoevento"
+                                className={({ isActive }) => (isActive ? "header-link-ativo" : "")}
+                            >
+                                Tipos de Evento
+                            </NavLink>
+                            <NavLink
+                                to="/tipousuario"
+                                className={({ isActive }) => (isActive ? "header-link-ativo" : "")}
+                            >
+                                Tipos de Usuário
+                            </NavLink>
+                            <NavLink
+                                to="/usuarios"
+                                className={({ isActive }) => (isActive ? "header-link-ativo" : "")}
+                            >
                                 Usuários
-                            </NavLink>
-
-                            <NavLink to="/tipoevento">
-                                Tipo de Evento
-                            </NavLink>
-
-                            <NavLink to="/tipousuario">
-                                Tipo Usuário
                             </NavLink>
                         </>
                     )}
 
-                    <Link to="/home#contato">Contatos</Link>
+                    <Link to="/home#contato" onClick={irParaContato}>
+                        Contatos
+                    </Link>
                 </nav>
 
-                <div className="header-acoes">
+                <div className="header-auth">
                     {autenticado ? (
-                        <>
-                            {organizador && (
-                                <Link to="/conta">
-                                    Minha Conta
-                                </Link>
-                            )}
-
-                            <button type="button" onClick={sair}>
-                                Sair
-                            </button>
-                        </>
+                        <button
+                            type="button"
+                            onClick={sair}
+                            className="header-btn-sair"
+                            aria-label="Sair da conta"
+                        >
+                            Sair
+                        </button>
                     ) : (
-                        <Link to="/login">Entrar</Link>
+                        <Link to="/login" className="header-btn-entrar">
+                            Entrar
+                        </Link>
                     )}
                 </div>
             </div>

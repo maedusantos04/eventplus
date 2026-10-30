@@ -4,41 +4,103 @@
     --cor-texto: #17143f;
     --vermelho: #b51d44;
     --vermelho-escuro: #821b47;
-    --azul-claro: rgba(0,80,251,0.21);
+    --azul-claro: rgba(0, 80, 251, 0.21);
 }
 
-.header{
+.header {
     border-bottom: 1px solid var(--cinza-claro);
     background: var(--branco);
+    position: sticky;
+    top: 0;
+    z-index: 100;
 }
 
 .header-conteudo {
     width: min(1200px, calc(100% - 48px));
-    min-height: 60px;
+    min-height: 64px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 32px;
+    gap: 24px;
+}
+
+.header-logo-link {
+    display: flex;
+    align-items: center;
 }
 
 .header img {
-    width: 100px;
+    width: 108px;
+    height: auto;
 }
 
-.header nav{
+.header-nav {
     display: flex;
-    gap: 28px;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
 }
 
-.header a {
+.header a,
+.header-nav a {
     color: var(--cor-texto);
     text-decoration: none;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
 }
 
-.header button {
+.header-nav a:hover,
+.header-nav a.header-link-ativo {
+    color: var(--vermelho);
+    font-weight: 600;
+}
+
+.header-auth {
+    display: flex;
+    align-items: center;
+}
+
+.header-btn-sair {
     border: none;
     background: none;
-    color: var(--cor-texto);
+    color: var(--vermelho);
+    font-size: 0.95rem;
+    font-weight: 600;
     cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+.header-btn-sair:hover {
+    background-color: #fff0f3;
+}
+
+.header-btn-entrar {
+    color: var(--vermelho) !important;
+    font-weight: 600 !important;
+    padding: 6px 14px;
+    border: 1px solid var(--vermelho);
+    border-radius: 6px;
+    transition: all 0.2s ease;
+}
+
+.header-btn-entrar:hover {
+    background-color: var(--vermelho);
+    color: var(--branco) !important;
+}
+
+@media (max-width: 860px) {
+    .header-conteudo {
+        flex-direction: column;
+        padding: 12px 0;
+        gap: 12px;
+    }
+
+    .header-nav {
+        justify-content: center;
+        gap: 14px;
+    }
 }

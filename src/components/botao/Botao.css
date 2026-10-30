@@ -1,0 +1,34 @@
+:root {
+    --vermelho: #b51d44;
+    --vermelho-escuro: #821b47;
+}
+
+.botao,
+.btn-cadastrar {
+    background-color: var(--vermelho, #b51d44);
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.botao:hover:not(:disabled),
+.btn-cadastrar:hover:not(:disabled) {
+    background-color: var(--vermelho-escuro, #821b47);
+}
+
+.botao:disabled,
+.btn-cadastrar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

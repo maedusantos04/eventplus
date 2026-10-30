@@ -1,4 +1,3 @@
-
 import {
     useEffect,
     useRef,
@@ -23,14 +22,16 @@ import { AuthContext } from "./auth";
 function readSession(): AuthSession | null {
     try {
         const value = localStorage.getItem(SESSION_STORAGE_KEY);
-
-        if (!value) {
-            return null;
-        }
+        if (!value) return null;
 
         const session = JSON.parse(value) as AuthSession;
 
         if (!session.token || !session.usuario?.idUsuario) {
+            localStorage.removeItem(SESSION_STORAGE_KEY);
+            return null;
+        }
+
+        if (session.expiracao && new Date(session.expiracao).getTime() <= Date.now()) {
             localStorage.removeItem(SESSION_STORAGE_KEY);
             return null;
         }
@@ -43,76 +44,68 @@ function readSession(): AuthSession | null {
 }
 
 export function AuthProvider({ children }: PropsWithChildren) {
-    const [session, setSession] = useState<AuthSession | null>(
-        () => readSession()
-    );
-
+    const [session, setSession] = useState<AuthSession | null>(() => readSession());
     const initialSession = useRef(session);
-
-    const [carregandoSessao, setCarregandoSessao] = useState(
-        Boolean(session)
-    );
+    const [carregandoSessao, setCarregandoSessao] = useState(Boolean(session));
 
     function persist(next: AuthSession | null) {
         setSession(next);
 
         if (next) {
-            localStorage.setItem(
-                SESSION_STORAGE_KEY,
-                JSON.stringify(next)
-            );
+            localStorage.setItem(SESSION_STORAGE_KEY, JSON.stringify(next));
         } else {
             localStorage.removeItem(SESSION_STORAGE_KEY);
         }
     }
 
     async function atualizarUsuario() {
-        if (!session) {
+        if (!session?.usuario?.idUsuario) {
             return;
         }
 
-        const usuarioAtualizado = await usuarioService.buscar(
-            session.usuario.idUsuario
-        );
-
-        persist({
-            ...session,
-            usuario: {
-                ...usuarioAtualizado,
-                idTipoUsuarioNavigation:
-                    usuarioAtualizado.idTipoUsuarioNavigation ??
-                    session.usuario.idTipoUsuarioNavigation
-            }
-        });
-    }
-
-    async function login(payload: LoginPayload) {
-        const loginResponse = await authService.login(payload);
-
-        const baseSession: AuthSession = loginResponse;
-
-        // Mantém os dados completos que vieram do login.
-        persist(baseSession);
-
         try {
             const usuarioAtualizado = await usuarioService.buscar(
-                loginResponse.usuario.idUsuario
+                session.usuario.idUsuario
             );
 
             persist({
-                ...baseSession,
+                ...session,
                 usuario: {
                     ...usuarioAtualizado,
                     idTipoUsuarioNavigation:
                         usuarioAtualizado.idTipoUsuarioNavigation ??
-                        baseSession.usuario.idTipoUsuarioNavigation
+                        session.usuario.idTipoUsuarioNavigation
                 }
             });
-        } catch (error) {
-            console.error(
-                "Não foi possível atualizar os dados do usuário:",
-                error
-            );
+        } catch {
+            // Silencia erro se não for possível atualizar dados secundários
+        }
+    }
+
+    async function login(payload: LoginPayload) {
+        const loginResponse = await authService.login(payload);
+        const baseSession: AuthSession = loginResponse;
+
+        persist(baseSession);
+
+        if (loginResponse.usuario?.idUsuario) {
+            try {
+                const usuarioAtualizado = await usuarioService.buscar(
+                    loginResponse.usuario.idUsuario
+                );
+
+                persist({
+                    ...baseSession,
+                    usuario: {
+                        ...usuarioAtualizado,
+                        idTipoUsuarioNavigation:
+                            usuarioAtualizado.idTipoUsuarioNavigation ??
+                            baseSession.usuario.idTipoUsuarioNavigation
+                    }
+                });
+            } catch {
+                // Mantém baseSession se busca detalhada falhar
+            }
         }
     }
 
@@ -122,26 +115,19 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     useEffect(() => {
         const handleUnauthorized = () => {
-            persist(null);
+            setSession(null);
         };
 
-        window.addEventListener(
-            UNAUTHORIZED_EVENT,
-            handleUnauthorized
-        );
-
+        window.addEventListener(UNAUTHORIZED_EVENT, handleUnauthorized);
         return () => {
-            window.removeEventListener(
-                UNAUTHORIZED_EVENT,
-                handleUnauthorized
-            );
+            window.removeEventListener(UNAUTHORIZED_EVENT, handleUnauthorized);
         };
     }, []);
 
     useEffect(() => {
         const restored = initialSession.current;
 
-        if (!restored) {
+        if (!restored?.usuario?.idUsuario) {
             setCarregandoSessao(false);
             return;
         }
@@ -161,12 +147,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
                 persist(next);
             })
-            .catch((error) => {
-                console.error(
-                    "Não foi possível restaurar os dados do usuário:",
-                    error
-                );
-            })
+            .catch(() => undefined)
             .finally(() => {
                 setCarregandoSessao(false);
             });
